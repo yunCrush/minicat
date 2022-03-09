@@ -13,6 +13,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * Author: yunCrush
@@ -32,23 +33,37 @@ public class Bootstrap {
 		loadServlet();
 		ServerSocket serverSocket = new ServerSocket(port);
 		System.out.println("=======>Minicat start on port: " + port);
+		//没有使用线程池
+		// while (true) {
+		// 	Socket socket = serverSocket.accept();
+		// 	RequestProcessor processor = new RequestProcessor(socket,servletMap);
+		// 	processor.start();
+		// }
+		// 定义一个线程池
 		while (true) {
 			Socket socket = serverSocket.accept();
-			InputStream inputStream = socket.getInputStream();
-			// 封装Request对象和Response对象
-			Request request = new Request(inputStream);
-			Response response = new Response(socket.getOutputStream());
-			// 静态资源处理
-			if (servletMap.get(request.getUrl()) == null) {
-				response.outputHtml(request.getUrl());
-			} else {
-				// 动态资源servlet请求
-				HttpServlet httpServlet =
-						servletMap.get(request.getUrl());
-				httpServlet.service(request, response);
-			}
-			socket.close();
+			RequestProcessor processor = new RequestProcessor(socket, servletMap);
+
+			int corePoolSize = 10;
+			int maximumPoolSize = 50;
+			long keepAliveTime = 100L;
+			TimeUnit unit = TimeUnit.SECONDS;
+			BlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(50);
+			ThreadFactory threadFactory = Executors.defaultThreadFactory();
+			RejectedExecutionHandler handler = new
+					ThreadPoolExecutor.AbortPolicy();
+			ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(
+					corePoolSize,
+					maximumPoolSize,
+					keepAliveTime,
+					unit,
+					workQueue,
+					threadFactory,
+					handler
+			);
+			threadPoolExecutor.execute(processor);
 		}
+
 	}
 
 	/**
