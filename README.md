@@ -1,2 +1,2 @@
 # minicat
-　　　需求：封装Request和Response对象，返回html静态资源⽂件
+　　　　　需求：可以请求动态资源（Servlet）+线程池

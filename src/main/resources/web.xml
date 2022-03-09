@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<web-app>
+	<servlet>
+		<servlet-name>yuncrush</servlet-name>
+		<servlet-class>server.MyServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>yuncrush</servlet-name>
+		<!--通过http:localhost:8080/yuncrush 找到servlet-name寻找对应的class进行加载-->
+		<url-pattern>/yuncrush</url-pattern>
+	</servlet-mapping>
+
+
+</web-app>
