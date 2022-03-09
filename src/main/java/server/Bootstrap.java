@@ -49,7 +49,6 @@ public class Bootstrap {
 			}
 			socket.close();
 		}
-
 	}
 
 	/**
@@ -99,7 +98,6 @@ public class Bootstrap {
 	public static void main(String[] args) {
 		Bootstrap bootstrap = new Bootstrap();
 		try {
-
 			System.out.println("============>minicat start:");
 			bootstrap.start();
 		} catch (Exception e) {

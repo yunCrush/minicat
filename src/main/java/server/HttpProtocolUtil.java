@@ -12,7 +12,6 @@ public class HttpProtocolUtil {
 				"Content-Length: " + contentLength + " \n" +
 				"\r\n";
 	}
-
 	/**
 	 * 为响应码404提供请求头信息(此处也包含了数据内容)
 	 *
